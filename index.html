@@ -1,1 +1,191 @@
-            --transition-smooth: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EZZYCON | Engineering the Future</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;500;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --gold: #ffcc00;
+            --black: #050505;
+            --nebula-core: #0a0a1a; 
+            --nebula-glow: #0a1128;
+            --transition-smooth: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        body {
+            background: var(--black);
+            font-family: 'Inter', sans-serif;
+            color: white;
+            overflow-x: hidden;
+            /* 3D perspective to enable the tilt effect */
+            perspective: 1500px;
+            min-height: 100vh;
+        }
+
+        /* --- BACKGROUND COSMOS --- */
+        #bg-wrap {
+            position: fixed; inset: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, var(--nebula-glow) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, var(--nebula-core) 0%, transparent 50%),
+                var(--black);
+            background-size: 200% 200%;
+            animation: cosmicSwirl 40s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes cosmicSwirl {
+            0%, 100% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+        }
+
+        #star-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 1; pointer-events: none; }
+
+        /* --- 3D TILT WRAPPER --- */
+        /* This wrapper moves the entire website with the cursor */
+        #tilt-wrapper {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            transform-style: preserve-3d;
+            transition: transform 0.15s ease-out; /* Smooth follow-through */
+            z-index: 10;
+        }
+
+        /* --- WELCOME OVERLAY --- */
+        #welcome-screen {
+            position: fixed; inset: 0;
+            display: flex; justify-content: center; align-items: center;
+            background: #000; z-index: 5000;
+            transition: all 1.2s cubic-bezier(0.85, 0, 0.15, 1);
+        }
+        .letter {
+            font-size: 5rem; font-family: 'Syncopate'; font-weight: 700; color: transparent;
+            -webkit-text-stroke: 1px rgba(255, 204, 0, 0.3);
+            opacity: 0; transform: translateY(50px);
+            display: inline-block; transition: 0.7s ease;
+        }
+        .letter.active { opacity: 1; color: var(--gold); -webkit-text-stroke: 0px transparent; transform: translateY(0); }
+        .hide-overlay { transform: translateY(-100%); }
+
+        /* --- CONTENT STYLING --- */
+        #main-site { opacity: 0; transition: opacity 2s ease; }
+        .content-visible { opacity: 1 !important; }
+
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .hero h1 { font-family: 'Syncopate'; font-size: 3.5rem; letter-spacing: 15px; margin-bottom: 20px; }
+        .hero p { max-width: 800px; opacity: 0.5; font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; }
+
+        .services-section { padding: 100px 10%; text-align: center; }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 60px; }
+        .service-card {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 50px 35px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            text-align: left;
+            transition: var(--transition-smooth);
+        }
+        .service-card:hover { border-color: var(--gold); transform: translateZ(30px); } /* Card pops out on hover */
+        .card-icon { font-size: 2rem; color: var(--gold); margin-bottom: 20px; display: block; }
+
+    </style>
+</head>
+<body>
+
+    <div id="welcome-screen">
+        <div id="logo">
+            <span class="letter">E</span><span class="letter">Z</span><span class="letter">Z</span><span class="letter">Y</span><span class="letter">C</span><span class="letter">O</span><span class="letter">N</span>
+        </div>
+    </div>
+
+    <div id="bg-wrap"></div>
+    <canvas id="star-canvas"></canvas>
+
+    <div id="tilt-wrapper">
+        <main id="main-site">
+            <section class="hero">
+                <div style="position:absolute; top:40px; left:40px; font-family:'Syncopate'; color:var(--gold); font-size:1rem; letter-spacing:5px;">EZZYCON</div>
+                <h1>PRECISION<br><span style="color:var(--gold)">POWER</span></h1>
+                <p>Engineering robust digital architectures through advanced automation and mechanical excellence.</p>
+            </section>
+
+            <section class="services-section">
+                <h2 style="font-family:'Syncopate'; letter-spacing:10px; font-size:1.5rem; margin-bottom:20px;">CORE EXPERTISE</h2>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <span class="card-icon">⚡</span>
+                        <h3>PYTHON AUTOMATION</h3>
+                        <p>Building resilient backend protocols and AI-driven automation for enterprise-level scalability.</p>
+                    </div>
+                    <div class="service-card">
+                        <span class="card-icon">⚙️</span>
+                        <h3>MECHANICAL DESIGN</h3>
+                        <p>Integrating engineering physics with modern technical architecture for robust real-world solutions.</p>
+                    </div>
+                    <div class="service-card">
+                        <span class="card-icon">🌐</span>
+                        <h3>FULL-STACK AI</h3>
+                        <p>Developing seamless web interfaces integrated with machine learning models for smart experiences.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const welcome = document.getElementById('welcome-screen');
+            const mainSite = document.getElementById('main-site');
+            const tiltWrapper = document.getElementById('tilt-wrapper');
+            
+            // --- WELCOME ---
+            const letters = document.querySelectorAll('.letter');
+            letters.forEach((l, i) => { setTimeout(() => { l.classList.add('active'); }, i * 150); });
+
+            setTimeout(() => {
+                welcome.classList.add('hide-overlay');
+                mainSite.classList.add('content-visible');
+                initStars();
+            }, (letters.length * 150) + 1500);
+
+            // --- THE WHOLE WEB TILT EFFECT ---
+            document.addEventListener('mousemove', (e) => {
+                const xVal = (window.innerWidth / 2 - e.clientX) / 40; // Sensitivity factor
+                const yVal = (window.innerHeight / 2 - e.clientY) / 40;
+                
+                // Rotates the entire wrapper based on mouse position
+                tiltWrapper.style.transform = `rotateY(${-xVal}deg) rotateX(${yVal}deg)`;
+            });
+
+            // --- STARS ---
+            function initStars() {
+                const canvas = document.getElementById('star-canvas');
+                const ctx = canvas.getContext('2d');
+                let width, height, stars = [];
+                function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+                window.addEventListener('resize', resize); resize();
+                class Star {
+                    constructor() { this.x = Math.random() * width; this.y = Math.random() * height; this.z = Math.random() * width; this.size = 0.5; this.speed = 1.2; }
+                    update() { this.z -= this.speed; if (this.z <= 0) { this.z = width; this.x = Math.random() * width; this.y = Math.random() * height; } }
+                    draw() {
+                        let sx = (this.x - width/2) * (width/this.z) + width/2;
+                        let sy = (this.y - height/2) * (width/this.z) + height/2;
+                        let r = this.size * (width/this.z);
+                        ctx.beginPath(); ctx.fillStyle = `rgba(255, 255, 255, ${1 - this.z/width})`; ctx.arc(sx, sy, r/2, 0, Math.PI*2); ctx.fill();
+                    }
+                }
+                for (let i = 0; i < 300; i++) stars.push(new Star());
+                function animate() { ctx.fillStyle = 'rgba(5, 5, 5, 0.2)'; ctx.fillRect(0,0,width,height); stars.forEach(s => { s.update(); s.draw(); }); requestAnimationFrame(animate); }
+                animate();
+            }
+        });
+    </script>
+</body>
+</html>
