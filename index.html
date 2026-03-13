@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EZZYCON | Minimalist Engineering</title>
+    <title>EZZYCON | Engineering the Future</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;500;700&display=swap');
 
@@ -12,6 +12,7 @@
         :root {
             --gold: #ffcc00;
             --black: #0a0a0a;
+            --glass: rgba(255, 255, 255, 0.03);
             --transition-smooth: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
@@ -19,14 +20,14 @@
             background: var(--black);
             font-family: 'Inter', sans-serif;
             color: white;
-            overflow: hidden; 
+            overflow-x: hidden;
         }
 
-        /* --- 1. WELCOME OVERLAY (SAME) --- */
+        /* --- 1. WELCOME OVERLAY --- */
         #welcome-screen {
             position: fixed; inset: 0;
             display: flex; justify-content: center; align-items: center;
-            background: #000; z-index: 4000;
+            background: #000; z-index: 5000;
             transition: all 1.2s cubic-bezier(0.85, 0, 0.15, 1);
         }
         .logo-container { display: flex; gap: 15px; font-family: 'Syncopate', sans-serif; }
@@ -44,81 +45,95 @@
         }
         .hide-overlay { transform: translateY(-100%); }
 
-        /* --- 2. HIDDEN NAV & MENU BUTTON --- */
-        #menu-trigger {
-            position: fixed;
-            top: 40px;
-            right: 40px;
-            z-index: 2500;
-            padding: 15px 25px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 204, 0, 0.3);
-            color: var(--gold);
-            font-family: 'Syncopate';
-            font-size: 0.8rem;
-            letter-spacing: 3px;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            transition: var(--transition-smooth);
-            border-radius: 2px;
-        }
-        #menu-trigger:hover {
-            background: var(--gold);
-            color: black;
-            box-shadow: 0 0 30px rgba(255, 204, 0, 0.4);
-        }
-
-        /* FULL SCREEN OVERLAY MENU */
-        #full-menu {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 3000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transform: scale(1.1);
-            opacity: 0;
-            pointer-events: none;
-            transition: var(--transition-smooth);
-        }
-        #full-menu.open {
-            opacity: 1;
-            transform: scale(1);
-            pointer-events: auto;
-        }
-        .menu-link {
-            font-family: 'Syncopate';
-            font-size: 3rem;
-            color: white;
-            text-decoration: none;
-            margin: 20px 0;
-            letter-spacing: 10px;
-            transition: 0.4s;
-            opacity: 0.6;
-        }
-        .menu-link:hover {
-            opacity: 1;
-            color: var(--gold);
-            transform: translateX(20px);
-        }
-
-        /* --- 3. MAIN SITE CONTENT --- */
+        /* --- 2. MAIN SITE --- */
         #main-site { position: relative; width: 100%; min-height: 100vh; opacity: 0; transition: opacity 2s ease; }
         .content-visible { opacity: 1 !important; }
         #meteor-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 1; }
-        .site-wrapper { position: relative; z-index: 10; width: 100%; min-height: 100vh; }
+        .site-wrapper { position: relative; z-index: 10; width: 100%; }
 
-        .magnetic-text { display: inline-block; cursor: default; }
+        #menu-trigger {
+            position: fixed; top: 40px; right: 40px; z-index: 2500;
+            padding: 15px 25px; background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 204, 0, 0.3); color: var(--gold);
+            font-family: 'Syncopate'; font-size: 0.8rem; letter-spacing: 3px;
+            cursor: pointer; backdrop-filter: blur(10px); transition: var(--transition-smooth);
+        }
+        #menu-trigger:hover { background: var(--gold); color: black; box-shadow: 0 0 30px rgba(255, 204, 0, 0.4); }
+
+        .magnetic-text { display: inline-block; }
         .m-letter { display: inline-block; transition: transform 0.2s ease-out; pointer-events: auto; white-space: pre; }
 
+        /* --- HERO --- */
         .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
         .hero h1 { font-family: 'Syncopate'; font-size: 3.5rem; letter-spacing: 12px; margin-bottom: 20px; }
-        .hero p { max-width: 700px; opacity: 0.6; line-height: 1.8; margin-bottom: 40px; text-transform: uppercase; }
+        .hero p { max-width: 700px; opacity: 0.6; line-height: 1.8; margin-bottom: 40px; text-transform: uppercase; font-size: 0.9rem; }
 
-        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 100px 10%; background: var(--black); }
-        .card { background: rgba(255, 255, 255, 0.02); padding: 50px; border-left: 2px solid rgba(255, 204, 0, 0.1); }
+        /* --- COOL SERVICES CARDS --- */
+        .services-section {
+            padding: 100px 10%;
+            background: linear-gradient(to bottom, transparent, #050505);
+            text-align: center;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .service-card {
+            background: var(--glass);
+            padding: 60px 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition-smooth);
+            text-align: left;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            transform: translateX(-100%);
+            transition: 0.6s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            border-color: rgba(255, 204, 0, 0.3);
+            background: rgba(255, 204, 0, 0.02);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .service-card:hover::before { transform: translateX(100%); }
+
+        .card-icon {
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 25px;
+            display: block;
+        }
+
+        .service-card h3 {
+            font-family: 'Syncopate';
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .service-card p {
+            font-size: 0.85rem;
+            line-height: 1.8;
+            opacity: 0.5;
+            font-weight: 300;
+        }
+
     </style>
 </head>
 <body>
@@ -131,14 +146,6 @@
 
     <button id="menu-trigger">MENU</button>
 
-    <div id="full-menu">
-        <a href="#" class="menu-link magnetic-text">HOME</a>
-        <a href="#solutions" class="menu-link magnetic-text">SOLUTIONS</a>
-        <a href="#" class="menu-link magnetic-text">PROJECTS</a>
-        <a href="#" class="menu-link magnetic-text">CONTACT</a>
-        <button id="close-menu" style="background:none; border:none; color:var(--gold); font-family:'Syncopate'; margin-top:50px; cursor:pointer; letter-spacing:5px;">[ CLOSE ]</button>
-    </div>
-
     <main id="main-site">
         <canvas id="meteor-canvas"></canvas>
 
@@ -150,17 +157,31 @@
                     <span class="magnetic-text" style="color:rgba(255,255,255,0.3)">&</span>
                     <span class="magnetic-text" style="color:var(--gold)">POWER</span>
                 </h1>
-                <p class="magnetic-text">Engineering robust digital architectures through advanced automation and mechanical excellence.</p>
+                <p class="magnetic-text">Engineering the future through high-performance Python scripts and Mechanical precision.</p>
             </section>
 
-            <section class="features" id="solutions">
-                <div class="card">
-                    <h3 class="magnetic-text">SYSTEM AUTOMATION</h3>
-                    <p class="magnetic-text">Leveraging high-level Python protocols for industrial workflows.</p>
-                </div>
-                <div class="card">
-                    <h3 class="magnetic-text">TECHNICAL DESIGN</h3>
-                    <p class="magnetic-text">Integrating mechanical precision with modern software.</p>
+            <section class="services-section">
+                <h2 class="magnetic-text" style="font-family:'Syncopate'; letter-spacing:10px; font-size:2rem; margin-bottom:20px;">OUR EXPERTISE</h2>
+                <div class="services-grid">
+                    
+                    <div class="service-card">
+                        <span class="card-icon">⚡</span>
+                        <h3 class="magnetic-text">PYTHON AUTOMATION</h3>
+                        <p class="magnetic-text">Building resilient backend protocols and AI-driven automation for enterprise-level scalability.</p>
+                    </div>
+
+                    <div class="service-card">
+                        <span class="card-icon">⚙️</span>
+                        <h3 class="magnetic-text">MECHANICAL DESIGN</h3>
+                        <p class="magnetic-text">Integrating engineering physics with modern technical architecture for robust real-world solutions.</p>
+                    </div>
+
+                    <div class="service-card">
+                        <span class="card-icon">🌐</span>
+                        <h3 class="magnetic-text">FULL-STACK AI</h3>
+                        <p class="magnetic-text">Developing seamless web interfaces integrated with machine learning models for smart experiences.</p>
+                    </div>
+
                 </div>
             </section>
         </div>
@@ -171,11 +192,8 @@
             const welcome = document.getElementById('welcome-screen');
             const mainSite = document.getElementById('main-site');
             const logo = document.getElementById('logo');
-            const menuTrigger = document.getElementById('menu-trigger');
-            const fullMenu = document.getElementById('full-menu');
-            const closeMenu = document.getElementById('close-menu');
 
-            // --- 1. WELCOME ---
+            // --- WELCOME ---
             const letters = document.querySelectorAll('.letter');
             letters.forEach((l, i) => { setTimeout(() => { l.classList.add('active'); }, i * 150); });
 
@@ -190,15 +208,11 @@
                 }, 2200);
             }, (letters.length * 150) + 500);
 
-            // --- 2. MENU LOGIC ---
-            menuTrigger.addEventListener('click', () => { fullMenu.classList.add('open'); document.body.style.overflow = 'hidden'; });
-            closeMenu.addEventListener('click', () => { fullMenu.classList.remove('open'); document.body.style.overflow = 'auto'; });
-
-            // --- 3. MAGNETIC EFFECT (APPLIED TO TEXT ONLY) ---
+            // --- MAGNETIC EFFECT ---
             function applyMagneticEffect() {
                 const targets = document.querySelectorAll('.magnetic-text');
                 targets.forEach(target => {
-                    if (target.children.length > 0) return; // Prevent double wrapping
+                    if (target.children.length > 0) return;
                     const content = target.textContent;
                     target.innerHTML = '';
                     [...content].forEach(char => {
@@ -222,7 +236,7 @@
                 });
             }
 
-            // --- 4. METEORS ---
+            // --- METEORS ---
             function initMeteors() {
                 const canvas = document.getElementById('meteor-canvas');
                 const ctx = canvas.getContext('2d');
