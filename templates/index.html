@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EZZYCON | Engineering the Future</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;500;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --gold: #ffcc00;
+            --black: #0a0a0a;
+            --glass: rgba(255, 255, 255, 0.03);
+            --transition-smooth: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        body {
+            background: var(--black);
+            font-family: 'Inter', sans-serif;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* --- 1. WELCOME OVERLAY --- */
+        #welcome-screen {
+            position: fixed; inset: 0;
+            display: flex; justify-content: center; align-items: center;
+            background: #000; z-index: 5000;
+            transition: all 1.2s cubic-bezier(0.85, 0, 0.15, 1);
+        }
+        .logo-container { display: flex; gap: 15px; font-family: 'Syncopate', sans-serif; }
+        .letter {
+            font-size: 5rem; font-weight: 700; color: transparent;
+            -webkit-text-stroke: 1px rgba(255, 204, 0, 0.3);
+            opacity: 0; transform: translateY(50px);
+            display: inline-block; transition: 0.7s ease;
+        }
+        .letter.active { opacity: 1; color: var(--gold); -webkit-text-stroke: 0px transparent; transform: translateY(0); }
+        .shine-effect .letter { animation: premiumGlow 1.5s ease-in-out forwards; }
+        @keyframes premiumGlow {
+            0%, 100% { color: var(--gold); text-shadow: 0 0 10px var(--gold); }
+            50% { color: #fff; text-shadow: 0 0 40px var(--gold); transform: scale(1.1); }
+        }
+        .hide-overlay { transform: translateY(-100%); }
+
+        /* --- 2. MAIN SITE --- */
+        #main-site { position: relative; width: 100%; min-height: 100vh; opacity: 0; transition: opacity 2s ease; }
+        .content-visible { opacity: 1 !important; }
+        
+        /* Meteor Canvas stays fixed to cover the whole scrolling page */
+        #meteor-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 1; pointer-events: none; }
+        
+        .site-wrapper { position: relative; z-index: 10; width: 100%; }
+
+        #menu-trigger {
+            position: fixed; top: 40px; right: 40px; z-index: 2500;
+            padding: 15px 25px; background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 204, 0, 0.3); color: var(--gold);
+            font-family: 'Syncopate'; font-size: 0.8rem; letter-spacing: 3px;
+            cursor: pointer; backdrop-filter: blur(10px); transition: var(--transition-smooth);
+        }
+        #menu-trigger:hover { background: var(--gold); color: black; box-shadow: 0 0 30px rgba(255, 204, 0, 0.4); }
+
+        /* MAGNETIC EFFECT (Only for specific texts) */
+        .magnetic-text { display: inline-block; }
+        .m-letter { display: inline-block; transition: transform 0.2s ease-out; pointer-events: auto; white-space: pre; }
+
+        /* --- HERO --- */
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .hero h1 { font-family: 'Syncopate'; font-size: 3.5rem; letter-spacing: 12px; margin-bottom: 20px; }
+        .hero p { max-width: 800px; opacity: 0.6; line-height: 1.8; margin-bottom: 40px; text-transform: uppercase; font-size: 0.9rem; padding: 0 20px; }
+
+        /* --- SERVICES CARDS (NO MAGNETIC, ONLY ANIMATION) --- */
+        .services-section { padding: 100px 10%; text-align: center; }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 60px; }
+
+        .service-card {
+            background: var(--glass);
+            padding: 60px 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            position: relative;
+            transition: var(--transition-smooth);
+            text-align: left;
+            cursor: pointer;
+        }
+
+        /* Hover Animation: Border Glow & Lift */
+        .service-card:hover {
+            transform: translateY(-15px);
+            border-color: var(--gold);
+            box-shadow: 0 0 30px rgba(255, 204, 0, 0.15);
+            background: rgba(255, 204, 0, 0.02);
+        }
+
+        .card-icon { font-size: 2.5rem; color: var(--gold); margin-bottom: 25px; display: block; transition: 0.3s; }
+        .service-card:hover .card-icon { transform: scale(1.2) rotate(-5deg); text-shadow: 0 0 15px var(--gold); }
+
+        .service-card h3 { font-family: 'Syncopate'; font-size: 1.2rem; letter-spacing: 3px; margin-bottom: 20px; color: #fff; }
+        .service-card p { font-size: 0.85rem; line-height: 1.8; opacity: 0.5; font-weight: 300; }
+
+    </style>
+</head>
+<body>
+
+    <div id="welcome-screen">
+        <div class="logo-container" id="logo">
+            <span class="letter">E</span><span class="letter">Z</span><span class="letter">Z</span><span class="letter">Y</span><span class="letter">C</span><span class="letter">O</span><span class="letter">N</span>
+        </div>
+    </div>
+
+    <button id="menu-trigger">MENU</button>
+
+    <main id="main-site">
+        <canvas id="meteor-canvas"></canvas>
+
+        <div class="site-wrapper">
+            <section class="hero">
+                <div class="nav-logo magnetic-text" style="position:absolute; top:40px; left:40px; font-family:'Syncopate'; color:var(--gold); font-size:1.2rem; letter-spacing:5px;">EZZYCON</div>
+                <h1>
+                    <span class="magnetic-text" style="color:#fff">PRECISION</span>
+                    <span class="magnetic-text" style="color:rgba(255,255,255,0.3)">&</span>
+                    <span class="magnetic-text" style="color:var(--gold)">POWER</span>
+                </h1>
+                <p class="magnetic-text">Engineering robust digital architectures through advanced automation and mechanical excellence.</p>
+            </section>
+
+            <section class="services-section">
+                <h2 class="magnetic-text" style="font-family:'Syncopate'; letter-spacing:10px; font-size:2rem; margin-bottom:20px;">CORE EXPERTISE</h2>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <span class="card-icon">⚡</span>
+                        <h3>PYTHON AUTOMATION</h3>
+                        <p>Building resilient backend protocols and AI-driven automation for enterprise-level scalability.</p>
+                    </div>
+                    <div class="service-card">
+                        <span class="card-icon">⚙️</span>
+                        <h3>MECHANICAL DESIGN</h3>
+                        <p>Integrating engineering physics with modern technical architecture for robust real-world solutions.</p>
+                    </div>
+                    <div class="service-card">
+                        <span class="card-icon">🌐</span>
+                        <h3>FULL-STACK AI</h3>
+                        <p>Developing seamless web interfaces integrated with machine learning models for smart experiences.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const welcome = document.getElementById('welcome-screen');
+            const mainSite = document.getElementById('main-site');
+            const logo = document.getElementById('logo');
+
+            // --- WELCOME ---
+            const letters = document.querySelectorAll('.letter');
+            letters.forEach((l, i) => { setTimeout(() => { l.classList.add('active'); }, i * 150); });
+
+            setTimeout(() => {
+                logo.classList.add('shine-effect');
+                setTimeout(() => {
+                    welcome.classList.add('hide-overlay');
+                    mainSite.classList.add('content-visible');
+                    document.body.style.overflowY = 'auto';
+                    initMeteors();
+                    applyMagneticEffect();
+                }, 2200);
+            }, (letters.length * 150) + 500);
+
+            // --- MAGNETIC EFFECT (Restricted to .magnetic-text) ---
+            function applyMagneticEffect() {
+                const targets = document.querySelectorAll('.magnetic-text');
+                targets.forEach(target => {
+                    if (target.children.length > 0) return;
+                    const content = target.textContent;
+                    target.innerHTML = '';
+                    [...content].forEach(char => {
+                        const span = document.createElement('span');
+                        span.innerText = char;
+                        span.className = 'm-letter';
+                        target.appendChild(span);
+                    });
+                });
+
+                const allLetters = document.querySelectorAll('.m-letter');
+                document.addEventListener('mousemove', (e) => {
+                    allLetters.forEach(letter => {
+                        const rect = letter.getBoundingClientRect();
+                        const dist = Math.sqrt(Math.pow(e.clientX - (rect.left + rect.width/2), 2) + Math.pow(e.clientY - (rect.top + rect.height/2), 2));
+                        if (dist < 70) {
+                            const force = (70 - dist) / 70;
+                            letter.style.transform = `translate(${(e.clientX - (rect.left + rect.width/2)) / dist * force * -20}px, ${(e.clientY - (rect.top + rect.height/2)) / dist * force * -20}px)`;
+                        } else { letter.style.transform = 'translate(0,0)'; }
+                    });
+                });
+            }
+
+            // --- METEORS (Full Page Coverage) ---
+            function initMeteors() {
+                const canvas = document.getElementById('meteor-canvas');
+                const ctx = canvas.getContext('2d');
+                let width, height, meteors = [];
+                function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+                window.addEventListener('resize', resize); resize();
+                class Meteor {
+                    constructor() { this.reset(); }
+                    reset() { this.x = Math.random() * width * 1.5 - width * 0.5; this.y = -20; this.length = Math.random() * 100 + 50; this.speed = Math.random() * 10 + 5; this.opacity = Math.random() * 0.4 + 0.1; }
+                    update() { this.x += this.speed * 0.8; this.y += this.speed; if (this.y > height + 20) this.reset(); }
+                    draw() {
+                        ctx.beginPath();
+                        const g = ctx.createLinearGradient(this.x, this.y, this.x - this.length * 0.8, this.y - this.length);
+                        g.addColorStop(0, `rgba(255, 204, 0, ${this.opacity})`); g.addColorStop(1, 'rgba(0,0,0,0)');
+                        ctx.strokeStyle = g; ctx.lineWidth = 1; ctx.moveTo(this.x, this.y); ctx.lineTo(this.x - this.length * 0.8, this.y - this.length); ctx.stroke();
+                    }
+                }
+                for (let i = 25; i > 0; i--) meteors.push(new Meteor());
+                function animate() { ctx.clearRect(0,0,width,height); meteors.forEach(m => {m.update(); m.draw();}); requestAnimationFrame(animate); }
+                animate();
+            }
+        });
+    </script>
+</body>
+</html>
