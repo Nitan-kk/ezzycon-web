@@ -12,18 +12,33 @@
         :root {
             --gold: #ffcc00;
             --black: #0a0a0a;
+            /* Premium Nebula Colors */
+            --nebula-core: #1a1a2e; 
+            --nebula-glow: #0f3460;
             --glass: rgba(255, 255, 255, 0.03);
             --transition-smooth: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         body {
-            background: var(--black);
+            /* COOL PREMIUM BACKGROUND: Animated Cosmic Vortex */
+            background: 
+                radial-gradient(circle at 30% 30%, var(--nebula-core) 0%, transparent 40%),
+                radial-gradient(circle at 70% 70%, var(--nebula-glow) 0%, transparent 40%),
+                var(--black);
+            background-size: 200% 200%;
+            animation: cosmicSwirl 30s ease-in-out infinite;
             font-family: 'Inter', sans-serif;
             color: white;
             overflow-x: hidden;
         }
 
-        /* --- 1. WELCOME OVERLAY --- */
+        /* Ambient background animation */
+        @keyframes cosmicSwirl {
+            0%, 100% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+        }
+
+        /* --- 1. WELCOME OVERLAY (Unchanged) --- */
         #welcome-screen {
             position: fixed; inset: 0;
             display: flex; justify-content: center; align-items: center;
@@ -45,11 +60,11 @@
         }
         .hide-overlay { transform: translateY(-100%); }
 
-        /* --- 2. MAIN SITE --- */
+        /* --- 2. MAIN SITE (Unchanged) --- */
         #main-site { position: relative; width: 100%; min-height: 100vh; opacity: 0; transition: opacity 2s ease; }
         .content-visible { opacity: 1 !important; }
         
-        /* Meteor Canvas stays fixed to cover the whole scrolling page */
+        /* Meteor Canvas is fixed to cover the whole scrolling page */
         #meteor-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 1; pointer-events: none; }
         
         .site-wrapper { position: relative; z-index: 10; width: 100%; }
@@ -63,16 +78,16 @@
         }
         #menu-trigger:hover { background: var(--gold); color: black; box-shadow: 0 0 30px rgba(255, 204, 0, 0.4); }
 
-        /* MAGNETIC EFFECT (Only for specific texts) */
+        /* MAGNETIC EFFECT (Only for specific texts, Unchanged) */
         .magnetic-text { display: inline-block; }
         .m-letter { display: inline-block; transition: transform 0.2s ease-out; pointer-events: auto; white-space: pre; }
 
-        /* --- HERO --- */
+        /* --- HERO (Unchanged) --- */
         .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
         .hero h1 { font-family: 'Syncopate'; font-size: 3.5rem; letter-spacing: 12px; margin-bottom: 20px; }
         .hero p { max-width: 800px; opacity: 0.6; line-height: 1.8; margin-bottom: 40px; text-transform: uppercase; font-size: 0.9rem; padding: 0 20px; }
 
-        /* --- SERVICES CARDS (NO MAGNETIC, ONLY ANIMATION) --- */
+        /* --- SERVICES CARDS (NO MAGNETIC, ONLY ANIMATION, Unchanged) --- */
         .services-section { padding: 100px 10%; text-align: center; }
         .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 60px; }
 
@@ -157,7 +172,7 @@
             const mainSite = document.getElementById('main-site');
             const logo = document.getElementById('logo');
 
-            // --- WELCOME ---
+            // --- WELCOME (Unchanged) ---
             const letters = document.querySelectorAll('.letter');
             letters.forEach((l, i) => { setTimeout(() => { l.classList.add('active'); }, i * 150); });
 
@@ -172,7 +187,7 @@
                 }, 2200);
             }, (letters.length * 150) + 500);
 
-            // --- MAGNETIC EFFECT (Restricted to .magnetic-text) ---
+            // --- MAGNETIC EFFECT (Restricted, Unchanged) ---
             function applyMagneticEffect() {
                 const targets = document.querySelectorAll('.magnetic-text');
                 targets.forEach(target => {
@@ -200,7 +215,7 @@
                 });
             }
 
-            // --- METEORS (Full Page Coverage) ---
+            // --- METEORS (Optimized for smoother premium look) ---
             function initMeteors() {
                 const canvas = document.getElementById('meteor-canvas');
                 const ctx = canvas.getContext('2d');
@@ -209,7 +224,13 @@
                 window.addEventListener('resize', resize); resize();
                 class Meteor {
                     constructor() { this.reset(); }
-                    reset() { this.x = Math.random() * width * 1.5 - width * 0.5; this.y = -20; this.length = Math.random() * 100 + 50; this.speed = Math.random() * 10 + 5; this.opacity = Math.random() * 0.4 + 0.1; }
+                    reset() { 
+                        this.x = Math.random() * width * 1.5 - width * 0.5; 
+                        this.y = -20; 
+                        this.length = Math.random() * 120 + 60; // Slightly longer for premium feel
+                        this.speed = Math.random() * 8 + 4; // Slightly slower, more cinematic
+                        this.opacity = Math.random() * 0.3 + 0.05; // Fainter, less distracting
+                    }
                     update() { this.x += this.speed * 0.8; this.y += this.speed; if (this.y > height + 20) this.reset(); }
                     draw() {
                         ctx.beginPath();
