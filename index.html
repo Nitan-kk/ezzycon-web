@@ -7,7 +7,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@300;500;700&display=swap');
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
             --gold: #ffcc00;
@@ -21,6 +21,7 @@
             color: white;
             overflow-x: hidden;
             min-height: 100vh;
+            touch-action: manipulation; /* Optimizes touch for mobile */
         }
 
         /* --- 1. EXPLOSIVE WELCOME PAGE --- */
@@ -30,9 +31,10 @@
             background: #000; z-index: 5000;
             transition: transform 1.5s cubic-bezier(1, 0, 0, 1), opacity 1.5s ease;
         }
-        .welcome-logo { display: flex; gap: 20px; perspective: 1000px; }
+        .welcome-logo { display: flex; gap: 10px; perspective: 1000px; }
         .letter {
-            font-size: 6rem; font-family: 'Syncopate'; font-weight: 700;
+            font-size: clamp(2rem, 15vw, 6rem); /* Responsive font size */
+            font-family: 'Syncopate'; font-weight: 700;
             color: var(--gold); text-shadow: 0 0 30px rgba(255, 204, 0, 0.5);
             filter: blur(20px); opacity: 0; transform: translateZ(-200px);
             transition: 1s cubic-bezier(0.17, 0.67, 0.83, 0.67);
@@ -47,10 +49,9 @@
             background: radial-gradient(circle at 50% 50%, #0a1128 0%, #050505 100%);
         }
 
-        /* --- 3. MAGNETIC CONTENT WRAPPER --- */
+        /* --- 3. WRAPPER --- */
         #move-wrapper {
             position: relative; width: 100%;
-            transition: transform 0.3s cubic-bezier(0.1, 0, 0, 1);
             z-index: 10;
         }
 
@@ -67,36 +68,47 @@
         #main-site { opacity: 0; transition: opacity 2s ease; }
         .content-visible { opacity: 1 !important; }
 
-        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-        .hero h1 { font-family: 'Syncopate'; font-size: clamp(2.5rem, 10vw, 5rem); letter-spacing: 20px; line-height: 1.2; margin-bottom: 30px; }
-        .hero p { max-width: 900px; opacity: 0.6; font-size: 0.9rem; letter-spacing: 4px; text-transform: uppercase; padding: 0 20px; }
+        .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; }
+        .hero h1 { font-family: 'Syncopate'; font-size: clamp(1.8rem, 8vw, 5rem); letter-spacing: clamp(5px, 2vw, 20px); line-height: 1.2; margin-bottom: 20px; }
+        .hero p { max-width: 800px; opacity: 0.6; font-size: clamp(0.7rem, 2vw, 0.9rem); letter-spacing: 2px; text-transform: uppercase; }
 
-        .services-section { padding: 120px 10%; text-align: center; }
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 50px; margin-top: 80px; }
+        .services-section { padding: 80px 5%; text-align: center; }
+        .services-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 30px; 
+            margin-top: 50px; 
+        }
         
-        /* Cards & Buttons: NO Magnetic Effect */
         .service-card {
-            background: rgba(255, 255, 255, 0.01); 
-            padding: 60px 40px;
-            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.02); 
+            padding: 40px 30px;
+            border-radius: 4px;
             border: 1px solid rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(12px);
             text-align: left;
             transition: var(--transition-premium);
         }
         .service-card:hover { border-color: var(--gold); background: rgba(255, 204, 0, 0.02); transform: translateY(-10px); }
-        .card-icon { font-size: 2.5rem; color: var(--gold); margin-bottom: 25px; display: block; }
-        .service-card h3 { font-family: 'Syncopate'; font-size: 1.2rem; letter-spacing: 3px; margin-bottom: 20px; color: #fff; }
-        .service-card p { opacity: 0.5; line-height: 1.8; font-size: 0.9rem; }
+        .card-icon { font-size: 2rem; color: var(--gold); margin-bottom: 20px; display: block; }
+        .service-card h3 { font-family: 'Syncopate'; font-size: 1rem; letter-spacing: 2px; margin-bottom: 15px; color: #fff; }
+        .service-card p { opacity: 0.5; line-height: 1.6; font-size: 0.85rem; }
 
-        button#menu-btn {
-            position: fixed; top: 40px; right: 40px; z-index: 2500;
-            padding: 15px 30px; background: transparent; border: 1px solid var(--gold);
-            color: var(--gold); font-family: 'Syncopate'; font-size: 0.7rem; letter-spacing: 4px;
-            transition: 0.3s;
+        #menu-btn {
+            position: fixed; top: 20px; right: 20px; z-index: 2500;
+            padding: 10px 20px; background: transparent; border: 1px solid var(--gold);
+            color: var(--gold); font-family: 'Syncopate'; font-size: 0.6rem; letter-spacing: 2px;
         }
-        button#menu-btn:hover { background: var(--gold); color: black; box-shadow: 0 0 30px var(--gold); }
 
+        /* --- MOBILE MEDIA QUERIES --- */
+        @media (max-width: 768px) {
+            .hero h1 { letter-spacing: 5px; }
+            .welcome-logo { gap: 10px; }
+            #menu-btn { top: 15px; right: 15px; padding: 8px 15px; }
+            .services-section { padding: 60px 20px; }
+            /* Disable move effect on mobile to prevent jitter */
+            #move-wrapper { transform: none !important; } 
+        }
     </style>
 </head>
 <body>
@@ -114,13 +126,12 @@
     <div id="move-wrapper">
         <main id="main-site">
             <section class="hero">
-                <div class="magnetic-area" style="position:absolute; top:40px; left:40px; font-family:'Syncopate'; color:var(--gold); font-size:1.1rem; letter-spacing:8px;">EZZYCON</div>
                 <h1 class="magnetic-area">PRECISION<br><span style="color:var(--gold)">POWER</span></h1>
                 <p class="magnetic-area">Engineering robust digital architectures through advanced automation and mechanical excellence.</p>
             </section>
 
             <section class="services-section">
-                <h2 class="magnetic-area" style="font-family:'Syncopate'; letter-spacing:15px; font-size:2rem; margin-bottom:40px;">CORE EXPERTISE</h2>
+                <h2 class="magnetic-area" style="font-family:'Syncopate'; letter-spacing:10px; font-size:clamp(1.2rem, 5vw, 2rem); margin-bottom:30px;">CORE EXPERTISE</h2>
                 <div class="services-grid">
                     <div class="service-card">
                         <span class="card-icon">⚡</span>
@@ -147,8 +158,9 @@
             const welcome = document.getElementById('welcome-screen');
             const mainSite = document.getElementById('main-site');
             const moveWrapper = document.getElementById('move-wrapper');
+            const isMobile = window.innerWidth <= 768;
             
-            // 1. Explosive Welcome Sequence
+            // 1. Welcome Sequence
             const letters = document.querySelectorAll('.letter');
             letters.forEach((l, i) => { setTimeout(() => { l.classList.add('active'); }, i * 150); });
 
@@ -156,17 +168,22 @@
                 welcome.classList.add('hide-overlay');
                 mainSite.classList.add('content-visible');
                 initStars();
-                initMagneticExplosion();
+                if (!isMobile) {
+                    initMagneticExplosion();
+                    initParallax();
+                }
             }, 3000);
 
-            // 2. Parallax Move (Floating site)
-            document.addEventListener('mousemove', (e) => {
-                const moveX = (window.innerWidth / 2 - e.clientX) / 45;
-                const moveY = (window.innerHeight / 2 - e.clientY) / 45;
-                moveWrapper.style.transform = `translateX(${moveX}px) translateY(${moveY}px)`;
-            });
+            // 2. Parallax (Desktop Only)
+            function initParallax() {
+                document.addEventListener('mousemove', (e) => {
+                    const moveX = (window.innerWidth / 2 - e.clientX) / 45;
+                    const moveY = (window.innerHeight / 2 - e.clientY) / 45;
+                    moveWrapper.style.transform = `translateX(${moveX}px) translateY(${moveY}px)`;
+                });
+            }
 
-            // 3. Magnetic Repel Effect (Explosive style)
+            // 3. Magnetic Repel (Desktop Only)
             function initMagneticExplosion() {
                 const areas = document.querySelectorAll('.magnetic-area');
                 areas.forEach(area => {
@@ -186,14 +203,12 @@
                         const rect = char.getBoundingClientRect();
                         const charX = rect.left + rect.width / 2;
                         const charY = rect.top + rect.height / 2;
-                        const distX = e.clientX - charX;
-                        const distY = e.clientY - charY;
-                        const dist = Math.sqrt(distX * distX + distY * distY);
+                        const dist = Math.sqrt(Math.pow(e.clientX - charX, 2) + Math.pow(e.clientY - charY, 2));
 
-                        if (dist < 100) { // Detection radius
+                        if (dist < 100) {
                             const force = (100 - dist) / 100;
-                            const repelX = (distX / dist) * force * -60; // How far letters fly
-                            const repelY = (distY / dist) * force * -60;
+                            const repelX = ((e.clientX - charX) / dist) * force * -60;
+                            const repelY = ((e.clientY - charY) / dist) * force * -60;
                             char.style.transform = `translate(${repelX}px, ${repelY}px) scale(${1 + force})`;
                             char.style.color = 'var(--gold)';
                         } else {
@@ -204,7 +219,7 @@
                 });
             }
 
-            // 4. Infinite Stars
+            // 4. Infinite Stars (Both)
             function initStars() {
                 const canvas = document.getElementById('star-canvas');
                 const ctx = canvas.getContext('2d');
@@ -213,30 +228,20 @@
                 window.addEventListener('resize', resize); resize();
 
                 class Star {
-                    constructor() {
-                        this.reset();
-                        this.z = Math.random() * width;
-                    }
-                    reset() {
-                        this.x = Math.random() * width;
-                        this.y = Math.random() * height;
-                        this.z = width;
-                    }
-                    update() {
-                        this.z -= 2;
-                        if (this.z <= 0) this.reset();
-                    }
+                    constructor() { this.reset(); this.z = Math.random() * width; }
+                    reset() { this.x = Math.random() * width; this.y = Math.random() * height; this.z = width; }
+                    update() { this.z -= (isMobile ? 1 : 2); if (this.z <= 0) this.reset(); }
                     draw() {
                         let sx = (this.x - width/2) * (width/this.z) + width/2;
                         let sy = (this.y - height/2) * (width/this.z) + height/2;
-                        let r = 1.5 * (width/this.z);
+                        let r = (isMobile ? 1 : 1.5) * (width/this.z);
                         ctx.beginPath();
                         ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1, 1 - this.z/width)})`;
                         ctx.arc(sx, sy, r/2, 0, Math.PI*2);
                         ctx.fill();
                     }
                 }
-                for (let i = 0; i < 400; i++) stars.push(new Star());
+                for (let i = 0; i < (isMobile ? 150 : 400); i++) stars.push(new Star());
                 function animate() {
                     ctx.fillStyle = '#050505';
                     ctx.fillRect(0, 0, width, height);
