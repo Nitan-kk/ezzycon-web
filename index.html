@@ -48,7 +48,10 @@
         /* --- 2. MAIN SITE --- */
         #main-site { position: relative; width: 100%; min-height: 100vh; opacity: 0; transition: opacity 2s ease; }
         .content-visible { opacity: 1 !important; }
-        #meteor-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 1; }
+        
+        /* Meteor Canvas stays fixed to cover the whole scrolling page */
+        #meteor-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 1; pointer-events: none; }
+        
         .site-wrapper { position: relative; z-index: 10; width: 100%; }
 
         #menu-trigger {
@@ -60,27 +63,18 @@
         }
         #menu-trigger:hover { background: var(--gold); color: black; box-shadow: 0 0 30px rgba(255, 204, 0, 0.4); }
 
+        /* MAGNETIC EFFECT (Only for specific texts) */
         .magnetic-text { display: inline-block; }
         .m-letter { display: inline-block; transition: transform 0.2s ease-out; pointer-events: auto; white-space: pre; }
 
         /* --- HERO --- */
         .hero { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
         .hero h1 { font-family: 'Syncopate'; font-size: 3.5rem; letter-spacing: 12px; margin-bottom: 20px; }
-        .hero p { max-width: 700px; opacity: 0.6; line-height: 1.8; margin-bottom: 40px; text-transform: uppercase; font-size: 0.9rem; }
+        .hero p { max-width: 800px; opacity: 0.6; line-height: 1.8; margin-bottom: 40px; text-transform: uppercase; font-size: 0.9rem; padding: 0 20px; }
 
-        /* --- COOL SERVICES CARDS --- */
-        .services-section {
-            padding: 100px 10%;
-            background: linear-gradient(to bottom, transparent, #050505);
-            text-align: center;
-        }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-            margin-top: 60px;
-        }
+        /* --- SERVICES CARDS (NO MAGNETIC, ONLY ANIMATION) --- */
+        .services-section { padding: 100px 10%; text-align: center; }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 60px; }
 
         .service-card {
             background: var(--glass);
@@ -89,50 +83,24 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(15px);
             position: relative;
-            overflow: hidden;
             transition: var(--transition-smooth);
             text-align: left;
+            cursor: pointer;
         }
 
-        .service-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
-            transform: translateX(-100%);
-            transition: 0.6s;
-        }
-
+        /* Hover Animation: Border Glow & Lift */
         .service-card:hover {
-            transform: translateY(-15px) scale(1.02);
-            border-color: rgba(255, 204, 0, 0.3);
+            transform: translateY(-15px);
+            border-color: var(--gold);
+            box-shadow: 0 0 30px rgba(255, 204, 0, 0.15);
             background: rgba(255, 204, 0, 0.02);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
 
-        .service-card:hover::before { transform: translateX(100%); }
+        .card-icon { font-size: 2.5rem; color: var(--gold); margin-bottom: 25px; display: block; transition: 0.3s; }
+        .service-card:hover .card-icon { transform: scale(1.2) rotate(-5deg); text-shadow: 0 0 15px var(--gold); }
 
-        .card-icon {
-            font-size: 2.5rem;
-            color: var(--gold);
-            margin-bottom: 25px;
-            display: block;
-        }
-
-        .service-card h3 {
-            font-family: 'Syncopate';
-            font-size: 1.2rem;
-            letter-spacing: 3px;
-            margin-bottom: 20px;
-            color: #fff;
-        }
-
-        .service-card p {
-            font-size: 0.85rem;
-            line-height: 1.8;
-            opacity: 0.5;
-            font-weight: 300;
-        }
+        .service-card h3 { font-family: 'Syncopate'; font-size: 1.2rem; letter-spacing: 3px; margin-bottom: 20px; color: #fff; }
+        .service-card p { font-size: 0.85rem; line-height: 1.8; opacity: 0.5; font-weight: 300; }
 
     </style>
 </head>
@@ -157,31 +125,27 @@
                     <span class="magnetic-text" style="color:rgba(255,255,255,0.3)">&</span>
                     <span class="magnetic-text" style="color:var(--gold)">POWER</span>
                 </h1>
-                <p class="magnetic-text">Engineering the future through high-performance Python scripts and Mechanical precision.</p>
+                <p class="magnetic-text">Engineering robust digital architectures through advanced automation and mechanical excellence.</p>
             </section>
 
             <section class="services-section">
-                <h2 class="magnetic-text" style="font-family:'Syncopate'; letter-spacing:10px; font-size:2rem; margin-bottom:20px;">OUR EXPERTISE</h2>
+                <h2 class="magnetic-text" style="font-family:'Syncopate'; letter-spacing:10px; font-size:2rem; margin-bottom:20px;">CORE EXPERTISE</h2>
                 <div class="services-grid">
-                    
                     <div class="service-card">
                         <span class="card-icon">⚡</span>
-                        <h3 class="magnetic-text">PYTHON AUTOMATION</h3>
-                        <p class="magnetic-text">Building resilient backend protocols and AI-driven automation for enterprise-level scalability.</p>
+                        <h3>PYTHON AUTOMATION</h3>
+                        <p>Building resilient backend protocols and AI-driven automation for enterprise-level scalability.</p>
                     </div>
-
                     <div class="service-card">
                         <span class="card-icon">⚙️</span>
-                        <h3 class="magnetic-text">MECHANICAL DESIGN</h3>
-                        <p class="magnetic-text">Integrating engineering physics with modern technical architecture for robust real-world solutions.</p>
+                        <h3>MECHANICAL DESIGN</h3>
+                        <p>Integrating engineering physics with modern technical architecture for robust real-world solutions.</p>
                     </div>
-
                     <div class="service-card">
                         <span class="card-icon">🌐</span>
-                        <h3 class="magnetic-text">FULL-STACK AI</h3>
-                        <p class="magnetic-text">Developing seamless web interfaces integrated with machine learning models for smart experiences.</p>
+                        <h3>FULL-STACK AI</h3>
+                        <p>Developing seamless web interfaces integrated with machine learning models for smart experiences.</p>
                     </div>
-
                 </div>
             </section>
         </div>
@@ -208,7 +172,7 @@
                 }, 2200);
             }, (letters.length * 150) + 500);
 
-            // --- MAGNETIC EFFECT ---
+            // --- MAGNETIC EFFECT (Restricted to .magnetic-text) ---
             function applyMagneticEffect() {
                 const targets = document.querySelectorAll('.magnetic-text');
                 targets.forEach(target => {
@@ -236,7 +200,7 @@
                 });
             }
 
-            // --- METEORS ---
+            // --- METEORS (Full Page Coverage) ---
             function initMeteors() {
                 const canvas = document.getElementById('meteor-canvas');
                 const ctx = canvas.getContext('2d');
@@ -254,7 +218,7 @@
                         ctx.strokeStyle = g; ctx.lineWidth = 1; ctx.moveTo(this.x, this.y); ctx.lineTo(this.x - this.length * 0.8, this.y - this.length); ctx.stroke();
                     }
                 }
-                for (let i = 0; i < 20; i++) meteors.push(new Meteor());
+                for (let i = 25; i > 0; i--) meteors.push(new Meteor());
                 function animate() { ctx.clearRect(0,0,width,height); meteors.forEach(m => {m.update(); m.draw();}); requestAnimationFrame(animate); }
                 animate();
             }
